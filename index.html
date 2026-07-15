@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F&I Schedule Board</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 15px;
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .logo-title-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-right: auto;
+        }
+        .logo-img {
+            height: 55px;
+            width: auto;
+            display: block;
+        }
+        .app-title h2 {
+            margin: 0 0 3px 0;
+            font-size: 24px;
+            color: #1a4a7c;
+            font-weight: 700;
+        }
+        .controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        select, button {
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-refresh {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            transition: background 0.2s;
+        }
+        .btn-refresh:hover {
+            background-color: #0056b3;
+        }
+        .btn-print {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            transition: background 0.2s;
+        }
+        .btn-print:hover {
+            background-color: #5a6268;
+        }
+        .btn-vacation {
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+        .btn-vacation:hover {
+            background-color: #218838;
+        }
+
+        .store-selector-panel {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        .store-selector-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #495057;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #fff;
+            padding: 4px 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+        .checkbox-container input {
+            cursor: pointer;
+            margin: 0;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            border-top: 2px solid #000;
+            border-left: 2px solid #000;
+        }
+        .calendar-weekday-header {
+            background-color: #f8f9fa;
+            text-align: center;
+            font-weight: bold;
+            padding: 6px 0;
+            border-right: 2px solid #000;
+            border-bottom: 2px solid #000;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+        .calendar-cell {
+            min-height: 125px;
+            background-color: #fff;
+            border-right: 2px solid #000;
+            border-bottom: 2px solid #000;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .calendar-cell.empty {
+            background-color: #fafafa;
+        }
+        .day-number-badge {
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid #000;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+            background-color: #f8f9fa;
+        }
+        .shifts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        
+        .location-group {
+            border: 1px dashed #ccc;
+            border-radius: 3px;
+            padding: 3px;
+            background-color: #fafafa;
+        }
+        .location-group-title {
+            font-size: 9px;
+            font-weight: 800;
+            color: #495057;
+            text-transform: uppercase;
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 3px;
+            padding-bottom: 1px;
+        }
+        .employee-shift {
+            font-size: 10px;
+            padding: 2px 4px;
+            border-radius: 2px;
+            background-color: #fff;
+            border: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2px;
+            align-items: center;
+        }
+        .employee-shift.override {
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+            font-weight: bold;
+            color: #856404;
+        }
+        
+        .employee-shift.off-day {
+            background-color: #e9ecef !important;
+            color: #6c757d !important;
+            border-color: #ced4da !important;
+            font-style: italic;
+        }
+        .employee-shift.vacation-day {
+            background-color: #d4edda !important;
+            color: #155724 !important;
+            border-color: #c3e6cb !important;
+            font-weight: bold;
+        }
+
+        /* BLUE HOLIDAY STYLE UPDATED */
+        .holiday-banner {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            font-weight: bold;
+            font-size: 10px;
+            text-align: center;
+            padding: 3px;
+            border-radius: 3px;
+            margin-bottom: 4px;
+            border: 1px solid #bee5eb;
+        }
+        .sunday-cell {
+            background-color: #f8f9fa;
+        }
+        .sunday-closed {
+            color: #777;
+            font-style: italic;
+            text-align: center;
+            margin-top: auto;
+            margin-bottom: auto;
+            font-size: 12px;
+        }
+        .status-message {
+            font-weight: bold;
+            color: #ffc107;
+            margin-top: 2px;
+            font-size: 13px;
+        }
+
+        @media print {
+            @page { size: letter portrait; margin: 0.15in; }
+            body { background-color: white; padding: 0; margin: 0; }
+            .container { box-shadow: none; padding: 0; max-width: 100%; }
+            .controls, .btn-refresh, .btn-print, .btn-vacation, .store-selector-panel { 
+                display: none !important; 
+            }
+            .header { border-bottom: none; margin-bottom: 5px; padding-bottom: 0; }
+            .logo-img { height: 40px !important; }
+            .app-title h2 { font-size: 16px !important; }
+            .calendar-weekday-header { font-size: 10px !important; padding: 3px 0 !important; }
+            .calendar-cell { min-height: 85px !important; padding: 2px !important; }
+            .day-number-badge { width: 14px !important; height: 14px !important; font-size: 9px !important; margin-bottom: 2px !important; }
+            .location-group { padding: 1px !important; margin-bottom: 1px !important; }
+            .location-group-title { font-size: 7px !important; margin-bottom: 1px !important; }
+            .employee-shift { font-size: 8px !important; padding: 0 1px !important; margin-bottom: 1px !important; }
+            .holiday-banner { font-size: 8px !important; padding: 1px !important; }
+            
+            .employee-shift.off-day { background-color: #f0f0f0 !important; border: 1px solid #ccc !important; }
+            .employee-shift.vacation-day { background-color: #e2f0d9 !important; border: 1px solid #a8d08d !important; }
+            .override { background-color: #fff2cc !important; border: 1px solid #ffd966 !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo-title-container">
+            <img class="logo-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVFQ7TisZcyMsjH_C65I5f16DCLSRtTUzv7K5Xvy6a&s=10" alt="Jeff Schmitt Auto Group Logo">
+            <div class="app-title">
+                <h2 id="printTitle">F&I Schedule Board</h2>
+                <div id="status" class="status-message">Connecting to live F&I database...</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn-refresh" onclick="loadDataViaScriptInjection()">🔄 Refresh Schedule</button>
+            <button class="btn-print" onclick="window.print()">Print Calendar (Portrait)</button>
+            <label for="monthSelect">Month:</label>
+            <select id="monthSelect" onchange="renderScheduleCalendar()"></select>
+            <select id="yearSelect" onchange="renderScheduleCalendar()"></select>
+            <a href="https://form.jotform.com/cault/jsaf-fi-vacation-request-form" target="_blank" class="btn-vacation">Request Vacation</a>
+        </div>
+    </div>
+
+    <div id="storeSelectorPanel" class="store-selector-panel" style="display: none;">
+        <div class="store-selector-title">Select Stores to Display:</div>
+        <div id="checkboxesWrapper" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;"></div>
+    </div>
+
+    <div id="calendarContainer"></div>
+</div>
+
+<script>
+    // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL (ending in /exec) HERE:
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbypCJRYb1TYKymi8KP2lEcMKOB9qQbWR5U4CzAsVrYgbtn5V768duzEdEkZ2G0pOg1V/exec";
+
+    let templatesDataList = [];
+    let scheduleOverrides = {};
+    let uniqueStores = new Set();
+    let dynamicCheckboxesInitialized = false;
+
+    const weekdayHeaders = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const jsDayMap = {
+        0: 'Sunday', 1: 'Monday', 2: 'Tuesday', 3: 'Wednesday', 
+        4: 'Thursday', 5: 'Friday', 6: 'Saturday'
+    };
+
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const currentYear = new Date().getFullYear();
+    const monthSelect = document.getElementById('monthSelect');
+    const yearSelect = document.getElementById('yearSelect');
+
+    months.forEach((m, idx) => {
+        let opt = document.createElement('option');
+        opt.value = idx; opt.textContent = m;
+        if(idx === new Date().getMonth()) opt.selected = true;
+        monthSelect.appendChild(opt);
+    });
+
+    for(let y = currentYear - 1; y <= currentYear + 2; y++) {
+        let opt = document.createElement('option');
+        opt.value = y; opt.textContent = y;
+        if(y === currentYear) opt.selected = true;
+        yearSelect.appendChild(opt);
+    }
+
+    function loadDataViaScriptInjection() {
+        const statusDiv = document.getElementById('status');
+        if (webAppUrl.includes("PASTE_YOUR")) {
+            statusDiv.textContent = "⚠️ Configuration Needed: Open HTML in Notepad and paste your Apps Script deployment URL on line 166.";
+            statusDiv.style.color = "#dc3545";
+            return;
+        }
+
+        statusDiv.textContent = "🔄 Synchronizing live data from F&I database...";
+        statusDiv.style.color = "#ffc107";
+
+        const oldScript = document.getElementById('jsonpCallbackScript');
+        if (oldScript) oldScript.remove();
+
+        const cacheBuster = new Date().getTime();
+        const script = document.createElement('script');
+        script.id = 'jsonpCallbackScript';
+        script.src = `${webAppUrl}?callback=processIncomingGoogleData&_cb=${cacheBuster}`;
+        
+        script.onerror = function() {
+            statusDiv.textContent = "⚠️ Direct sync error. Check Apps Script access settings configuration.";
+            statusDiv.style.color = "#dc3545";
+        };
+        
+        document.body.appendChild(script);
+    }
+
+    window.processIncomingGoogleData = function(data) {
+        const statusDiv = document.getElementById('status');
+        try {
+            templatesDataList = [];
+            scheduleOverrides = {};
+            uniqueStores.clear();
+
+            if (data.Templates) {
+                data.Templates.forEach(row => {
+                    const name = row['Name'];
+                    const location = row['Location'] ? String(row['Location']).trim() : 'Unassigned';
+                    if (name) {
+                        uniqueStores.add(location);
+                        templatesDataList.push({
+                            name: name,
+                            location: location,
+                            Sunday: row['Sunday'] || '', Monday: row['Monday'] || '', Tuesday: row['Tuesday'] || '',
+                            Wednesday: row['Wednesday'] || '', Thursday: row['Thursday'] || '', Friday: row['Friday'] || '', Saturday: row['Saturday'] || ''
+                        });
+                    }
+                });
+            } else {
+                throw new Error("Missing 'Templates' tab reference structure.");
+            }
+
+            // CHECKBOX BEAVIOR PERSISTED ON BACKGROUND SYNC
+            if (!dynamicCheckboxesInitialized) {
+                buildStoreCheckboxes();
+                dynamicCheckboxesInitialized = true;
+            }
+
+            if (data.Overrides) {
+                data.Overrides.forEach(row => {
+                    const name = row['Name'] || row['Employee'];
+                    let rawDate = row['Date'];
+                    const shift = row['Shift'];
+                    if (name && rawDate && shift) {
+                        let dateKey = String(rawDate).trim();
+                        if (dateKey.includes(" ")) dateKey = dateKey.split(" ")[0];
+                        
+                        if (!scheduleOverrides[name]) scheduleOverrides[name] = {};
+                        scheduleOverrides[name][dateKey] = String(shift).trim();
+                    }
+                });
+            }
+
+            statusDiv.textContent = "✅ Connected & Live Sync Active";
+            statusDiv.style.color = "#28a745";
+            renderScheduleCalendar();
+        } catch(e) {
+            console.error(e);
+            statusDiv.textContent = "⚠️ Layout structure error. Check tab labels.";
+            statusDiv.style.color = "#dc3545";
+        }
+    }
+
+    function buildStoreCheckboxes() {
+        const wrapper = document.getElementById('checkboxesWrapper');
+        wrapper.innerHTML = "";
+        const sortedStores = Array.from(uniqueStores).sort();
+        sortedStores.forEach(storeName => {
+            const label = document.createElement('label');
+            label.className = 'checkbox-container';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = storeName;
+            checkbox.checked = false; // UNCHECKED BY DEFAULT
+            checkbox.addEventListener('change', renderScheduleCalendar);
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(` ${storeName}`));
+            wrapper.appendChild(label);
+        });
+        document.getElementById('storeSelectorPanel').style.display = 'flex';
+    }
+
+    function getSelectedStores() {
+        const checkedBoxes = document.querySelectorAll('#checkboxesWrapper input[type="checkbox"]:checked');
+        return Array.from(checkedBoxes).map(cb => cb.value);
+    }
+
+    function getUsHolidays(year) {
+        const holidays = {};
+        function getNthDayOfMonth(year, month, dayOfWeek, n) {
+            let count = 0; let date = new Date(year, month, 1);
+            while (date.getMonth() === month) {
+                if (date.getDay() === dayOfWeek) { count++; if (count === n) return date.getDate(); }
+                date.setDate(date.getDate() + 1);
+            }
+        }
+        function getLastDayOfMonth(year, month, dayOfWeek) {
+            let lastDate = null; let date = new Date(year, month, 1);
+            while (date.getMonth() === month) { if (date.getDay() === dayOfWeek) { lastDate = date.getDate(); } date.setDate(date.getDate() + 1); }
+            return lastDate;
+        }
+        // CLOSURES EXTENDED
+        holidays[`${year}-01-01`] = "🎉 CLOSED - New Year's Day";
+        holidays[`${year}-07-04`] = "🎆 CLOSED - 4th of July";
+        holidays[`${year}-12-24`] = "🎄 CLOSED - Christmas Eve";
+        holidays[`${year}-12-25`] = "🎅 CLOSED - Christmas Day";
+        const memDay = getLastDayOfMonth(year, 4, 1);
+        holidays[`${year}-05-${String(memDay).padStart(2, '0')}`] = "🎖️ CLOSED - Memorial Day";
+        const labDay = getNthDayOfMonth(year, 8, 1, 1);
+        holidays[`${year}-09-${String(labDay).padStart(2, '0')}`] = "🛠️ CLOSED - Labor Day";
+        const tbgDay = getNthDayOfMonth(year, 10, 4, 4);
+        holidays[`${year}-11-${String(tbgDay).padStart(2, '0')}`] = "🦃 CLOSED - Thanksgiving";
+        return holidays;
+    }
+
+    function renderScheduleCalendar() {
+        if (templatesDataList.length === 0) return;
+        const selectedMonth = parseInt(monthSelect.value);
+        const selectedYear = parseInt(yearSelect.value);
+        const selectedStores = getSelectedStores();
+        const container = document.getElementById('calendarContainer');
+        
+        document.getElementById('printTitle').innerHTML = `F&I Schedule Board &mdash; ${months[selectedMonth]} ${selectedYear}`;
+        container.innerHTML = "";
+        const grid = document.createElement('div');
+        grid.className = 'calendar-grid';
+
+        weekdayHeaders.forEach(dayName => {
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'calendar-weekday-header';
+            headerDiv.textContent = dayName;
+            grid.appendChild(headerDiv);
+        });
+
+        const firstDayIndex = new Date(selectedYear, selectedMonth, 1).getDay();
+        const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
+        const holidaysMap = getUsHolidays(selectedYear);
+
+        for (let i = 0; i < firstDayIndex; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.className = 'calendar-cell empty';
+            grid.appendChild(emptyCell);
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateObj = new Date(selectedYear, selectedMonth, day);
+            const dayOfWeekIndex = dateObj.getDay();
+            const dayNameString = jsDayMap[dayOfWeekIndex];
+            const dateKey = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
+
+            const cell = document.createElement('div');
+            cell.className = 'calendar-cell';
+            if (dayOfWeekIndex === 0) cell.classList.add('sunday-cell');
+
+            const badge = document.createElement('div');
+            badge.className = 'day-number-badge';
+            badge.textContent = day;
+            cell.appendChild(badge);
+
+            const shiftsContainer = document.createElement('div');
+            shiftsContainer.className = 'shifts-container';
+
+            if (holidaysMap[dateKey]) {
+                const banner = document.createElement('div');
+                banner.className = 'holiday-banner';
+                banner.innerHTML = holidaysMap[dateKey];
+                cell.appendChild(banner);
+            } 
+            else if (dayOfWeekIndex === 0) {
+                const closedMsg = document.createElement('div');
+                closedMsg.className = 'sunday-closed';
+                closedMsg.textContent = "CLOSED";
+                cell.appendChild(closedMsg);
+            } 
+            else {
+                const activeShiftsByLocation = {};
+                templatesDataList.forEach(empData => {
+                    if (!selectedStores.includes(empData.location)) return;
+
+                    let shiftText = "";
+                    let isOverride = false; let isVacation = false; let isOff = false;
+
+                    if (scheduleOverrides[empData.name] && scheduleOverrides[empData.name][dateKey] !== undefined) {
+                        shiftText = scheduleOverrides[empData.name][dateKey]; isOverride = true;
+                        if (shiftText.toUpperCase().includes("VAC")) { isVacation = true; shiftText = "✈️ VAC"; }
+                        else if (shiftText.toUpperCase() === "OFF") { isOff = true; }
+                    } 
+                    else if (empData[dayNameString] !== undefined) {
+                        shiftText = empData[dayNameString];
+                        if (shiftText.toUpperCase() === "OFF" || shiftText.toUpperCase() === "CLOSED") { isOff = true; shiftText = "OFF"; }
+                    }
+
+                    if (shiftText !== "") {
+                        if (!activeShiftsByLocation[empData.location]) activeShiftsByLocation[empData.location] = [];
+                        activeShiftsByLocation[empData.location].push({
+                            name: empData.name, shift: shiftText, override: isOverride, vacation: isVacation, off: isOff
+                        });
+                    }
+                });
+
+                Object.keys(activeShiftsByLocation).sort().forEach(locName => {
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = 'location-group';
+                    const groupTitle = document.createElement('div');
+                    groupTitle.className = 'location-group-title';
+                    groupTitle.textContent = locName;
+                    groupDiv.appendChild(groupTitle);
+
+                    activeShiftsByLocation[locName].forEach(emp => {
+                        const shiftDiv = document.createElement('div');
+                        shiftDiv.className = 'employee-shift';
+                        if (emp.vacation) shiftDiv.classList.add('vacation-day');
+                        else if (emp.off) shiftDiv.classList.add('off-day');
+                        else if (emp.override) shiftDiv.classList.add('override');
+                        shiftDiv.innerHTML = `<strong>${emp.name}</strong><span>${emp.shift}</span>`;
+                        groupDiv.appendChild(shiftDiv);
+                    });
+                    shiftsContainer.appendChild(groupDiv);
+                });
+                cell.appendChild(shiftsContainer);
+            }
+            grid.appendChild(cell);
+        }
+
+        const totalCellsAdded = firstDayIndex + daysInMonth;
+        const trailingEmptyCells = (7 - (totalCellsAdded % 7)) % 7;
+        for (let i = 0; i < trailingEmptyCells; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.className = 'calendar-cell empty';
+            grid.appendChild(emptyCell);
+        }
+        container.appendChild(grid);
+    }
+
+    loadDataViaScriptInjection();
+</script>
+
+</body>
+</html>
