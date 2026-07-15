@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -253,24 +253,99 @@
         }
 
         @media print {
-            @page { size: letter portrait; margin: 0.15in; }
-            body { background-color: white; padding: 0; margin: 0; transform: scale(0.90); transform-origin: top left; width: 111% !important;}
-            .container { box-shadow: none; padding: 0; max-width: 100%; }
+            @page { 
+                size: letter portrait; 
+                margin: 0.15in; 
+             }
+            body { 
+                 background-color: white; 
+                padding: 0; 
+                margin: 0;
+                /* Dynamic print viewport constraint engine */
+                height: 98vh;
+                max-height: 98vh;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden !important;
+            }
+            .container { 
+                box-shadow: none; 
+                padding: 0; 
+                max-width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
             .controls, .btn-refresh, .btn-print, .btn-vacation, .store-selector-panel { 
                 display: none !important; 
             }
-            .header { border-bottom: none; margin-bottom: 5px; padding-bottom: 0; }
-            .logo-img { height: 40px !important; }
-            .app-title h2 { font-size: 16px !important; }
-            .calendar-weekday-header { font-size: 10px !important; padding: 3px 0 !important; }
-            .calendar-cell { height: auto !important; min-height: 0 !important; padding: 1px !important; overflow: visible !important; }
-            .shifts-container { overflow: visible !important; max-height: none !important; height: auto !important; }
-            .day-number-badge { width: 14px !important; height: 14px !important; font-size: 9px !important; margin-bottom: 2px !important; }
-            .location-group { padding: 1px !important; margin-bottom: 1px !important; }
-            .location-group-title { font-size: 7px !important; margin-bottom: 1px !important; }
-            .employee-shift { font-size: 8px !important; padding: 0 1px !important; margin-bottom: 1px !important; }
-            .holiday-banner { font-size: 8px !important; padding: 1px !important; }
-            
+            .header { 
+                border-bottom: none; 
+                margin-bottom: 4px; 
+                padding-bottom: 0; 
+            }
+            .logo-img { height: 38px !important; }
+            .app-title h2 { font-size: 15px !important; }
+    
+            /* Automated Dynamic Flex Grid */
+            .calendar-grid {
+                display: grid;
+                grid-template-columns: repeat(7, 1fr);
+                grid-template-rows: auto repeat(5, minmax(10px, 1fr)); /* Rows squeeze to fit screen height */
+                border-top: 2px solid #000;
+                border-left: 2px solid #000;
+                flex-grow: 1;
+                height: 100%;
+            }
+            .calendar-weekday-header { 
+                font-size: 10px !important; 
+                padding: 2px 0 !important; 
+            }
+    
+            .calendar-cell { 
+                height: auto !important;
+                min-height: 0 !important;
+                padding: 1px !important; 
+                overflow: hidden !important;
+                display: flex;
+                flex-direction: column;
+            }
+            .shifts-container {
+                overflow: hidden !important;
+                max-height: none !important;
+                height: auto !important;
+                display: flex;
+                flex-direction: column;
+                gap: 1px !important; /* Tightens text spacing context dynamically */
+        }
+            .day-number-badge { 
+                width: 13px !important; 
+                height: 13px !important; 
+                font-size: 8px !important; 
+                margin-bottom: 1px !important; 
+        }
+            .location-group { 
+                padding: 1px !important; 
+                margin-bottom: 1px !important; 
+        }
+            .location-group-title { 
+                font-size: 7px !important; 
+                margin-bottom: 1px !important; 
+                line-height: 1 !important;
+        }
+    
+        /* Micro-scale layouts down automatically only when space is scarce */
+            .employee-shift { 
+                font-size: 8px !important; 
+            line-height: 1.1 !important;
+                padding: 0 1px !important; 
+                margin-bottom: 1px !important; 
+            }
+            .holiday-banner { 
+                font-size: 8px !important; 
+                padding: 1px !important; 
+            }
+    
             .employee-shift.off-day { background-color: #f0f0f0 !important; border: 1px solid #ccc !important; }
             .employee-shift.vacation-day { background-color: #e2f0d9 !important; border: 1px solid #a8d08d !important; }
             .override { background-color: #fff2cc !important; border: 1px solid #ffd966 !important; }
