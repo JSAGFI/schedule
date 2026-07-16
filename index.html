@@ -252,7 +252,7 @@
             font-size: 13px;
         }
         
-        /* ==========================================
+/* ==========================================
        MOBILE-FRIENDLY RESPONSIVE LAYER
        Only triggers on screens under 768px wide
        ========================================== */
@@ -297,12 +297,11 @@
         }
     
         /* Reposition date badge to look great in a list view */
-        /* Existing badge rule you have */
         .day-number-badge {
             position: static !important;
-            width: auto !important; /* Changed to auto so it expands for text */
+            width: auto !important; /* Expands for text */
             height: 24px !important;
-            padding: 0 8px !important; /* Gives room on the sides */
+            padding: 0 8px !important; 
             font-size: 12px !important;
             flex-shrink: 0;
             background-color: #f8f9fa;
@@ -310,7 +309,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 12px !important; /* Oval shape instead of circle */
+            border-radius: 12px !important; /* Oval shape */
         }
 
         /* NEW RULES: Automatically adds the short day name using your existing calendar headers */
@@ -336,54 +335,16 @@
         }
     
         /* Make employee shift boxes easier to tap with thumbs */
-            .employee-shift {
-        font-size: 11px !important;
-        padding: 4px 8px !important;
-        margin-bottom: 3px !important;
-        border-radius: 3px;
-        display: flex;
-        justify-content: space-between; /* Spreads name and hours cleanly */
-        white-space: nowrap !important; /* Prevents name/hours from wrapping to line 2 */
-        overflow: hidden;
-        text-overflow: ellipsis; /* Safely fades out text if a massive name overflows */
-    }
-
-    /* Targeted rules specifically for when the phone is held landscape sideways */
-    @media (orientation: landscape) and (max-height: 500px) {
         .employee-shift {
-            font-size: 8px !important; 
-            padding: 1px 2px !important;
-            display: flex !important;
-            justify-content: space-between !important;
-            flex-wrap: nowrap !important;
-            white-space: nowrap !important;
-        }
-        /* Force text container to chop off last names when out of screen space */
-        .employee-shift-name, .employee-shift div, .employee-shift span:first-child {
-            max-width: 42px !important;
-            display: inline-block !important;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: clip !important;
-        }
-        .location-group-title {
-            font-size: 7.5px !important;
-        }
-    }
-
-        .employee-shift, .employee-shift *, .employee-shift span, .employee-shift div {
-            white-space: nowrap !important;
-            display: inline-flex !important;
-            flex-wrap: nowrap !important;
-            align-items: center !important;
-            justify-content: space-between !important;
-            float: none !important;
-        }
-        
-        /* Force the inner text segments to not take up full width lines */
-        .employee-shift > * {
-            display: inline !important;
-            white-space: nowrap !important;
+            font-size: 11px !important;
+            padding: 4px 8px !important;
+            margin-bottom: 3px !important;
+            border-radius: 3px;
+            display: flex;
+            justify-content: space-between; 
+            white-space: nowrap !important; 
+            overflow: hidden;
+            text-overflow: ellipsis; 
         }
         
         /* Stack controls block vertically so buttons don't clip off screen */
@@ -398,7 +359,49 @@
             text-align: center;
             box-sizing: border-box;
         }
-    
+    } /* <-- This closes out the vertical mobile layer properly */
+
+    /* =============================================================
+       INDEPENDENT LANDSCAPE OVERRIDE
+       Triggers on any phone flipped sideways, regardless of width
+       ============================================================= */
+    @media screen and (orientation: landscape) and (max-height: 600px) {
+        .calendar-grid {
+            display: grid !important;
+            grid-template-columns: repeat(7, 1fr) !important;
+            flex-direction: row !important;
+        }
+        .calendar-weekday-header {
+            display: block !important; /* Bring back headers for the horizontal grid */
+        }
+        .calendar-cell {
+            display: flex !important;
+            flex-direction: column !important;
+            padding: 2px !important;
+        }
+        .day-number-badge::after {
+            display: none !important; /* Don't need text names in grid view */
+        }
+        .employee-shift {
+            font-size: 8px !important; 
+            padding: 1px 2px !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            flex-wrap: nowrap !important;
+            white-space: nowrap !important;
+        }
+        /* Hard-clamp the name block so it crops long last names out early */
+        .employee-shift > *:first-child, .employee-shift-name {
+            max-width: 38px !important;
+            display: inline-block !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: clip !important;
+        }
+        .location-group-title {
+            font-size: 7.5px !important;
+        }
+    }
         @media print {
             @page { 
                 size: letter portrait; 
