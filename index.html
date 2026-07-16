@@ -359,10 +359,19 @@
         }
    }
 
-        .employee-shift *, .employee-shift span, .employee-shift div {
+        .employee-shift, .employee-shift *, .employee-shift span, .employee-shift div {
             white-space: nowrap !important;
-            display: inline-block !important;
+            display: inline-flex !important;
+            flex-wrap: nowrap !important;
+            align-items: center !important;
+            justify-content: space-between !important;
             float: none !important;
+        }
+        
+        /* Force the inner text segments to not take up full width lines */
+        .employee-shift > * {
+            display: inline !important;
+            white-space: nowrap !important;
         }
         
         /* Stack controls block vertically so buttons don't clip off screen */
