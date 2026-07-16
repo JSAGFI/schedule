@@ -297,10 +297,12 @@
         }
     
         /* Reposition date badge to look great in a list view */
+        /* Existing badge rule you have */
         .day-number-badge {
             position: static !important;
-            width: 24px !important;
+            width: auto !important; /* Changed to auto so it expands for text */
             height: 24px !important;
+            padding: 0 8px !important; /* Gives room on the sides */
             font-size: 12px !important;
             flex-shrink: 0;
             background-color: #f8f9fa;
@@ -308,8 +310,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
+            border-radius: 12px !important; /* Oval shape instead of circle */
         }
+
+        /* NEW RULES: Automatically adds the short day name using your existing calendar headers */
+        .calendar-cell:nth-child(7n+2) .day-number-badge::after { content: " Sun"; font-weight: normal; opacity: 0.7; margin-left: 4px; }
+        .calendar-cell:nth-child(7n+3) .day-number-badge::after { content: " Mon"; font-weight: normal; opacity: 0.7; margin-left: 4px; }
+        .calendar-cell:nth-child(7n+4) .day-number-badge::after { content: " Tue"; font-weight: normal; opacity: 0.7; margin-left: 4px; }
+        .calendar-cell:nth-child(7n+5) .day-number-badge::after { content: " Wed"; font-weight: normal; opacity: 0.7; margin-left: 4px; }
+        .calendar-cell:nth-child(7n+6) .day-number-badge::after { content: " Thu"; font-weight: normal; opacity: 0.7; margin-left: 4px; }
+        .calendar-cell:nth-child(7n+7) .day-number-badge::after { content: " Fri"; font-weight: normal; opacity: 0.7; margin-left: 4px; }
+        .calendar-cell:nth-child(7n+8) .day-number-badge::after { content: " Sat"; font-weight: normal; opacity: 0.7; margin-left: 4px; }
     
         .shifts-container {
             flex-grow: 1;
@@ -325,15 +336,29 @@
         }
     
         /* Make employee shift boxes easier to tap with thumbs */
+            .employee-shift {
+        font-size: 11px !important;
+        padding: 4px 8px !important;
+        margin-bottom: 3px !important;
+        border-radius: 3px;
+        display: flex;
+        justify-content: space-between; /* Spreads name and hours cleanly */
+        white-space: nowrap !important; /* Prevents name/hours from wrapping to line 2 */
+        overflow: hidden;
+        text-overflow: ellipsis; /* Safely fades out text if a massive name overflows */
+    }
+
+    /* Targeted rules specifically for when the phone is held landscape sideways */
+    @media (orientation: landscape) and (max-height: 500px) {
         .employee-shift {
-            font-size: 11px !important;
-            padding: 4px 8px !important;
-            margin-bottom: 3px !important;
-            border-radius: 3px;
-            display: flex;
-            justify-content: space-between; /* Spreads name and hours cleanly */
+            font-size: 9.5px !important; /* Scales down text slightly for grid breathing room */
+            padding: 2px 4px !important;
         }
-    
+        .location-group-title {
+            font-size: 8px !important;
+        }
+    }
+        
         /* Stack controls block vertically so buttons don't clip off screen */
         .controls {
             flex-direction: column;
