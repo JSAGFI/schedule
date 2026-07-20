@@ -647,30 +647,6 @@
                 dynamicCheckboxesInitialized = true;
             }
 
-            if (data.Overrides) {
-                data.Overrides.forEach(row => {
-                    const name = row['Name'] || row['Employee'];
-                    let rawDate = row['Date'];
-                    const shift = row['Shift'];
-                    if (name && rawDate && shift) {
-                        let dateKey = String(rawDate).trim();
-                        if (dateKey.includes(" ")) dateKey = dateKey.split(" ")[0];
-                        
-                        if (!scheduleOverrides[name]) scheduleOverrides[name] = {};
-                        scheduleOverrides[name][dateKey] = String(shift).trim();
-                    }
-                });
-            }
-
-            statusDiv.textContent = "✅ Connected & Live Sync Active";
-            statusDiv.style.color = "#28a745";
-            renderScheduleCalendar();
-        } catch(e) {
-            console.error(e);
-            statusDiv.textContent = "⚠️ Layout structure error. Check tab labels.";
-            statusDiv.style.color = "#dc3545";
-        }
-    }
 
     function buildStoreCheckboxes() {
         const wrapper = document.getElementById('checkboxesWrapper');
