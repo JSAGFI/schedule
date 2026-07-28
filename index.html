@@ -527,10 +527,11 @@
         <div class="controls">
             <button class="btn-refresh" onclick="loadDataViaScriptInjection()">🔄 Refresh Schedule</button>
             <button class="btn-print" onclick="window.print()">Print Calendar (Portrait)</button>
+            <button type="button" onclick="changeMonth(-1)">◀ Prev</button>
             <label for="monthSelect">Month:</label>
             <select id="monthSelect" onchange="renderScheduleCalendar()"></select>
             <select id="yearSelect" onchange="renderScheduleCalendar()"></select>
-            <a href="https://form.jotform.com/cault/jsaf-fi-vacation-request-form" target="_blank" class="btn-vacation">Request PTO</a>
+            <button type="button" onclick="changeMonth(1)">Next ▶</button>            <a href="https://form.jotform.com/cault/jsaf-fi-vacation-request-form" target="_blank" class="btn-vacation">Request PTO</a>
             <a href="mailto:cault@jeffdeals.com?subject=FI%20Schedule" class="btn-print" style="text-decoration: none; padding: 8px 14px; border-radius: 4px; font-weight: bold; font-size: 13px; display: inline-block;">Email Questions / Changes</a>
         </div>
     </div>
@@ -741,6 +742,27 @@
         return holidays;
     }
 
+        function changeMonth(direction) {
+            let currentMonth = parseInt(monthSelect.value);
+            let currentYear = parseInt(yearSelect.value);
+
+            currentMonth += direction;
+
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+    }
+
+        const yearOption = Array.from(yearSelect.options).find(opt => parseInt(opt.value) === currentYear);
+        if (yearOption) {
+            monthSelect.value = currentMonth;
+            yearSelect.value = currentYear;
+            renderScheduleCalendar();
+    }
+}
     function renderScheduleCalendar() {
         if (templatesDataList.length === 0) return;
         const selectedMonth = parseInt(monthSelect.value);
