@@ -536,10 +536,12 @@
         </div>
     </div>
 
-    <div id="storeSelectorPanel" class="store-selector-panel" style="display: none;">
-        <div class="store-selector-title">Select Schedule(s) to Display:</div>
-        <div id="checkboxesWrapper" style="display: flex; flex-wrap: wrap; gap: 8.5px; align-items: center;"></div>
-    </div>
+        <div id="storeSelectorPanel" class="store-selector-panel" style="display: none;">
+            <div class="store-selector-title">Select Stores to Display:</div>
+            <button type="button" onclick="toggleAllStores(true)" style="padding: 2px 6px; font-size: 11px;">Select All</button>
+            <button type="button" onclick="toggleAllStores(false)" style="padding: 2px 6px; font-size: 11px;">Deselect All</button>
+            <div id="checkboxesWrapper" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;"></div>
+        </div>
 
     <div id="calendarContainer"></div>
 </div>
@@ -708,7 +710,15 @@
         });
         document.getElementById('storeSelectorPanel').style.display = 'flex';
     }
-
+    
+    function toggleAllStores(shouldCheck) {
+        const checkboxes = document.querySelectorAll('#checkboxesWrapper input[type="checkbox"]');
+        checkboxes.forEach(cb => {
+            cb.checked = shouldCheck;
+        });
+        renderScheduleCalendar(); // Redraws the calendar immediately
+    }
+    
     function getSelectedStores() {
         const checkedBoxes = document.querySelectorAll('#checkboxesWrapper input[type="checkbox"]:checked');
         return Array.from(checkedBoxes).map(cb => cb.value);
