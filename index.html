@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -127,7 +127,7 @@
             cursor: pointer;
             margin: 0;
         }
-         
+          
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -264,9 +264,8 @@
             font-size: 13px;
         }
         
-/* ==========================================
+    /* ==========================================
        MOBILE-FRIENDLY RESPONSIVE LAYER
-       Only triggers on screens under 768px wide
        ========================================== */
     @media screen and (max-width: 768px) {
         body {
@@ -283,7 +282,6 @@
             gap: 8px;
         }
     
-        /* Convert the horizontal grid into a clean vertical scroll stack */
         .calendar-grid {
             display: flex;
             flex-direction: column;
@@ -292,26 +290,23 @@
             border-right: 1px solid #ccc;
         }
     
-        /* Hide the layout header names (Sun, Mon, Tue) on mobile */
         .calendar-weekday-header {
             display: none;
         }    
     
-        /* Structure individual day cards */
         .calendar-cell {
             min-height: auto !important;
             display: flex;
-            flex-direction: row; /* Puts date badge on left, shifts on right */
+            flex-direction: row;
             align-items: flex-start;
             padding: 8px !important;
             border-bottom: 1px solid #ccc;
             gap: 10px;
         }
     
-        /* Reposition date badge to look great in a list view */
         .day-number-badge {
             position: static !important;
-            width: auto !important; /* Expands for text */
+            width: auto !important;
             height: 24px !important;
             padding: 0 8px !important; 
             font-size: 12px !important;
@@ -321,10 +316,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 12px !important; /* Oval shape */
+            border-radius: 12px !important;
         }
 
-        /* NEW RULES: Automatically adds the short day name using your existing calendar headers */
         .calendar-cell:nth-child(7n+1) .day-number-badge::after { content: " Sun"; font-weight: normal; opacity: 0.7; margin-left: 4px; }
         .calendar-cell:nth-child(7n+2) .day-number-badge::after { content: " Mon"; font-weight: normal; opacity: 0.7; margin-left: 4px; }
         .calendar-cell:nth-child(7n+3) .day-number-badge::after { content: " Tue"; font-weight: normal; opacity: 0.7; margin-left: 4px; }
@@ -339,14 +333,12 @@
             overflow: visible !important;
         }
     
-        /* Expand store group title blocks */
         .location-group-title {
             font-size: 10px !important;
             margin-top: 4px;
             color: #555;
         }
     
-        /* Make employee shift boxes easier to tap with thumbs */
         .employee-shift {
             font-size: 11px !important;
             padding: 4px 8px !important;
@@ -359,7 +351,6 @@
             text-overflow: ellipsis; 
         }
         
-        /* Stack controls block vertically so buttons don't clip off screen */
         .controls {
             flex-direction: column;
             align-items: stretch;
@@ -371,11 +362,10 @@
             text-align: center;
             box-sizing: border-box;
         }
-    } /* <-- This closes out the vertical mobile layer properly */
+    }
 
     /* =============================================================
        INDEPENDENT LANDSCAPE OVERRIDE
-       Triggers on any phone flipped sideways, regardless of width
        ============================================================= */
     @media screen and (orientation: landscape) and (max-height: 600px) {
         .calendar-grid {
@@ -384,7 +374,7 @@
             flex-direction: row !important;
         }
         .calendar-weekday-header {
-            display: block !important; /* Bring back headers for the horizontal grid */
+            display: block !important;
         }
         .calendar-cell {
             display: flex !important;
@@ -392,7 +382,7 @@
             padding: 2px !important;
         }
         .day-number-badge::after {
-            display: none !important; /* Don't need text names in grid view */
+            display: none !important;
         }
         .employee-shift {
             font-size: 9.5px !important; 
@@ -402,7 +392,6 @@
             flex-wrap: nowrap !important;
             white-space: nowrap !important;
         }
-        /* Hard-clamp the name block so it crops long last names out early */
         .employee-shift > *:first-child, .employee-shift-name {
             max-width: 68px !important;
             display: inline-block !important;
@@ -415,101 +404,99 @@
         }
     }
         
-@media print {
-            @page { 
-                size: letter portrait; /* Prints sideways to utilize maximum horizontal page width */
-                margin: 0.20in; 
-             }
-            body { 
-                background-color: white; 
-                padding: 0; 
-                margin: 0;
-                height: auto !important;
-                max-height: none !important;
-                overflow: visible !important;
-            }
-            .container { 
-                box-shadow: none; 
-                padding: 0; 
-                max-width: 100%;
-                height: auto !important;
-            }
-            .controls, .btn-refresh, .btn-print, .btn-vacation, .store-selector-panel { 
-                display: none !important; 
-            }
-            .header { 
-                border-bottom: none; 
-                margin-bottom: 8px; 
-                padding-bottom: 0; 
-            }
-            .logo-img { height: 45px !important; }
-            .app-title h2 { font-size: 18px !important; }
-    
-            /* Expanded Layout Grid */
-            .calendar-grid {
-                display: grid !important;
-                grid-template-columns: repeat(7, 1fr) !important;
-                grid-template-rows: auto !important; /* Rows now grow naturally based on content size */
-                border-top: 2px solid #000;
-                border-left: 2px solid #000;
-                height: auto !important;
-            }
-            .calendar-weekday-header { 
-                font-size: 13px !important; 
-                padding: 6px 0 !important; 
-                font-weight: bold !important;
-            }
-    
-            .calendar-cell { 
-                height: auto !important;
-                min-height: 110px !important; /* Hard forces larger boxes on paper */
-                padding: 4px !important; 
-                overflow: visible !important;
-                display: flex;
-                flex-direction: column;
-                page-break-inside: avoid;
-            }
-            .shifts-container {
-                overflow: visible !important;
-                max-height: none !important;
-                height: auto !important;
-                display: flex;
-                flex-direction: column;
-                gap: 3px !important; 
-            }
-            .day-number-badge { 
-                width: 18px !important; 
-                height: 18px !important; 
-                font-size: 11px !important; 
-                margin-bottom: 4px !important; 
-            }
-            .location-group { 
-                padding: 2px !important; 
-                margin-bottom: 3px !important; 
-            }
-            .location-group-title { 
-                font-size: 9px !important; 
-                margin-bottom: 2px !important; 
-                line-height: 1.2 !important;
-                font-weight: bold !important;
-            }
-    
-            /* Upgraded text sizes for high printer legibility */
-            .employee-shift { 
-                font-size: 10.5px !important; 
-                line-height: 1.3 !important;
-                padding: 2px 4px !important; 
-                margin-bottom: 2px !important; 
-            }
-            .holiday-banner { 
-                font-size: 10px !important; 
-                padding: 3px !important; 
-            }
-    
-            .employee-shift.off-day { background-color: #f0f0f0 !important; border: 1px solid #ccc !important; }
-            .employee-shift.vacation-day { background-color: #e2f0d9 !important; border: 1px solid #a8d08d !important; }
-            .override { background-color: #fff2cc !important; border: 1px solid #ffd966 !important; }
+    @media print {
+        @page { 
+            size: letter portrait; 
+            margin: 0.20in; 
         }
+        body { 
+            background-color: white; 
+            padding: 0; 
+            margin: 0;
+            height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
+        }
+        .container { 
+            box-shadow: none; 
+            padding: 0; 
+            max-width: 100%;
+            height: auto !important;
+        }
+        .controls, .btn-refresh, .btn-print, .btn-vacation, .store-selector-panel { 
+            display: none !important; 
+        }
+        .header { 
+            border-bottom: none; 
+            margin-bottom: 8px; 
+            padding-bottom: 0; 
+        }
+        .logo-img { height: 45px !important; }
+        .app-title h2 { font-size: 18px !important; }
+
+        .calendar-grid {
+            display: grid !important;
+            grid-template-columns: repeat(7, 1fr) !important;
+            grid-template-rows: auto !important;
+            border-top: 2px solid #000;
+            border-left: 2px solid #000;
+            height: auto !important;
+        }
+        .calendar-weekday-header { 
+            font-size: 13px !important; 
+            padding: 6px 0 !important; 
+            font-weight: bold !important;
+        }
+
+        .calendar-cell { 
+            height: auto !important;
+            min-height: 110px !important;
+            padding: 4px !important; 
+            overflow: visible !important;
+            display: flex;
+            flex-direction: column;
+            page-break-inside: avoid;
+        }
+        .shifts-container { 
+            overflow: visible !important;
+            max-height: none !important;
+            height: auto !important;
+            display: flex;
+            flex-direction: column;
+            gap: 3px !important; 
+        }
+        .day-number-badge { 
+            width: 18px !important; 
+            height: 18px !important; 
+            font-size: 11px !important; 
+            margin-bottom: 4px !important; 
+        }
+        .location-group { 
+            padding: 2px !important; 
+            margin-bottom: 3px !important; 
+        }
+        .location-group-title { 
+            font-size: 9px !important; 
+            margin-bottom: 2px !important; 
+            line-height: 1.2 !important;
+            font-weight: bold !important;
+        }
+
+        .employee-shift { 
+            font-size: 10.5px !important; 
+            line-height: 1.3 !important;
+            padding: 2px 4px !important; 
+            margin-bottom: 2px !important; 
+        }
+        .holiday-banner { 
+            font-size: 10px !important; 
+            padding: 3px !important; 
+        }
+
+        .employee-shift.off-day { background-color: #f0f0f0 !important; border: 1px solid #ccc !important; }
+        .employee-shift.vacation-day { background-color: #e2f0d9 !important; border: 1px solid #a8d08d !important; }
+        .override { background-color: #fff2cc !important; border: 1px solid #ffd966 !important; }
+    }
     </style>
 </head>
 <body>
@@ -531,23 +518,28 @@
             <label for="monthSelect">Month:</label>
             <select id="monthSelect" onchange="renderScheduleCalendar()"></select>
             <select id="yearSelect" onchange="renderScheduleCalendar()"></select>
-            <button type="button" onclick="changeMonth(1)">Next ▶</button>            <a href="https://form.jotform.com/cault/jsaf-fi-vacation-request-form" target="_blank" class="btn-vacation">Request PTO</a>
+            <button type="button" onclick="changeMonth(1)">Next ▶</button>
+            <a href="https://form.jotform.com/cault/jsaf-fi-vacation-request-form" target="_blank" class="btn-vacation">Request PTO</a>
             <a href="mailto:cault@jeffdeals.com?subject=FI%20Schedule" class="btn-print" style="text-decoration: none; padding: 8px 14px; border-radius: 4px; font-weight: bold; font-size: 13px; display: inline-block;">Email Questions / Changes</a>
         </div>
     </div>
 
-        <div id="storeSelectorPanel" class="store-selector-panel" style="display: none;">
-            <div class="store-selector-title">Select Stores to Display:</div>
-            <button type="button" onclick="toggleAllStores(true)" style="padding: 2px 6px; font-size: 11px;">Select All</button>
-            <button type="button" onclick="toggleAllStores(false)" style="padding: 2px 6px; font-size: 11px;">Deselect All</button>
-            <div id="checkboxesWrapper" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;"></div>
+    <div id="storeSelectorPanel" class="store-selector-panel" style="display: none;">
+        <div class="store-selector-title">Select Stores:</div>
+        <div style="display: flex; gap: 5px; align-items: center; flex-wrap: wrap;">
+            <button type="button" onclick="toggleAllStores(true)" style="padding: 3px 8px; font-size: 11px;">All</button>
+            <button type="button" onclick="toggleAllStores(false)" style="padding: 3px 8px; font-size: 11px;">None</button>
+            <button type="button" onclick="toggleStoreGroup('fairborn')" style="padding: 3px 8px; font-size: 11px; background: #e7f5ff; border-color: #74c0fc; color: #1971c2;">📍 Fairborn</button>
+            <button type="button" onclick="toggleStoreGroup('beavercreek')" style="padding: 3px 8px; font-size: 11px; background: #ebfbee; border-color: #8ce99a; color: #2f9e44;">📍 Beavercreek</button>
+            <button type="button" onclick="toggleStoreGroup('standalone')" style="padding: 3px 8px; font-size: 11px; background: #fff4e6; border-color: #ffd8a8; color: #d9480f;">Standalone</button>
         </div>
+        <div id="checkboxesWrapper" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;"></div>
+    </div>
 
     <div id="calendarContainer"></div>
 </div>
 
 <script>
-    // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL (ending in /exec) HERE:
     const webAppUrl = "https://script.google.com/macros/s/AKfycbypCJRYb1TYKymi8KP2lEcMKOB9qQbWR5U4CzAsVrYgbtn5V768duzEdEkZ2G0pOg1V/exec";
 
     let templatesDataList = [];
@@ -637,7 +629,6 @@
                 throw new Error("Missing 'Templates' tab reference structure.");
             }
 
-            // CHECKBOX BEHAVIOR PERSISTED ON BACKGROUND SYNC
             if (!dynamicCheckboxesInitialized) {
                 buildStoreCheckboxes();
                 dynamicCheckboxesInitialized = true;
@@ -651,10 +642,8 @@
                     const announcement = row['Announcement'];
                     
                     if (rawDate) {
-                        // Clean up timestamps if present
                         let dateStr = String(rawDate).trim().split(" ")[0].split("T")[0];
                         
-                        // Convert M/D/YYYY slashes to YYYY-MM-DD
                         let normalizedKey = dateStr;
                         if (dateStr.includes("/")) {
                             const parts = dateStr.split("/");
@@ -666,13 +655,11 @@
                             }
                         }
 
-                        // Store employee shift override if Name and Shift exist
                         if (name && shift) {
                             if (!scheduleOverrides[name]) scheduleOverrides[name] = {};
                             scheduleOverrides[name][normalizedKey] = String(shift).trim();
                         }
                         
-                        // Store general announcement if Announcement exists
                         if (announcement) {
                             if (!scheduleOverrides["__GENERAL_ANNOUNCEMENTS__"]) {
                                 scheduleOverrides["__GENERAL_ANNOUNCEMENTS__"] = {};
@@ -702,7 +689,7 @@
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.value = storeName;
-            checkbox.checked = false; // UNCHECKED BY DEFAULT
+            checkbox.checked = false;
             checkbox.addEventListener('change', renderScheduleCalendar);
             label.appendChild(checkbox);
             label.appendChild(document.createTextNode(` ${storeName}`));
@@ -716,7 +703,28 @@
         checkboxes.forEach(cb => {
             cb.checked = shouldCheck;
         });
-        renderScheduleCalendar(); // Redraws the calendar immediately
+        renderScheduleCalendar();
+    }
+
+    function toggleStoreGroup(groupKey) {
+        const groups = {
+            fairborn: ["Chevy North", "Mitsubishi", "GMC"],
+            beavercreek: ["Mazda", "Nissan", "Cadillac"],
+            standalone: ["Admin", "Chevy East", "Chevy South"]
+        };
+
+        const targetStores = groups[groupKey] || [];
+        const checkboxes = Array.from(document.querySelectorAll('#checkboxesWrapper input[type="checkbox"]'))
+            .filter(cb => targetStores.some(store => cb.value.toLowerCase().includes(store.toLowerCase())));
+
+        if (checkboxes.length === 0) return;
+
+        const allCurrentlyChecked = checkboxes.every(cb => cb.checked);
+        checkboxes.forEach(cb => {
+            cb.checked = !allCurrentlyChecked;
+        });
+
+        renderScheduleCalendar();
     }
     
     function getSelectedStores() {
@@ -738,7 +746,6 @@
             while (date.getMonth() === month) { if (date.getDay() === dayOfWeek) { lastDate = date.getDate(); } date.setDate(date.getDate() + 1); }
             return lastDate;
         }
-        // CLOSURES EXTENDED
         holidays[`${year}-01-01`] = "🎉 CLOSED - New Year's Day";
         holidays[`${year}-07-04`] = "🎆 CLOSED - 4th of July";
         holidays[`${year}-12-24`] = "🎄 CLOSED - Christmas Eve";
@@ -752,27 +759,28 @@
         return holidays;
     }
 
-        function changeMonth(direction) {
-            let currentMonth = parseInt(monthSelect.value);
-            let currentYear = parseInt(yearSelect.value);
+    function changeMonth(direction) {
+        let currentMonth = parseInt(monthSelect.value);
+        let currentYear = parseInt(yearSelect.value);
 
-            currentMonth += direction;
+        currentMonth += direction;
 
-            if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear++;
-            } else if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear--;
-    }
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        } else if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
 
         const yearOption = Array.from(yearSelect.options).find(opt => parseInt(opt.value) === currentYear);
         if (yearOption) {
             monthSelect.value = currentMonth;
             yearSelect.value = currentYear;
             renderScheduleCalendar();
+        }
     }
-}
+
     function renderScheduleCalendar() {
         if (templatesDataList.length === 0) return;
         const selectedMonth = parseInt(monthSelect.value);
@@ -806,7 +814,7 @@
             const dateObj = new Date(selectedYear, selectedMonth, day);
             const dayOfWeekIndex = dateObj.getDay();
             const dayNameString = jsDayMap[dayOfWeekIndex];
-            const dateKey = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
+            const dateKey = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0 daylight')}`.replace(' daylight', '');
 
             const cell = document.createElement('div');
             cell.className = 'calendar-cell';
