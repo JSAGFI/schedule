@@ -531,7 +531,6 @@
             <button type="button" onclick="toggleAllStores(false)" style="padding: 3px 8px; font-size: 11px;">None</button>
             <button type="button" onclick="toggleStoreGroup('fairborn')" style="padding: 3px 8px; font-size: 11px; background: #e7f5ff; border-color: #74c0fc; color: #1971c2;">📍 Fairborn</button>
             <button type="button" onclick="toggleStoreGroup('beavercreek')" style="padding: 3px 8px; font-size: 11px; background: #ebfbee; border-color: #8ce99a; color: #2f9e44;">📍 Beavercreek</button>
-            <button type="button" onclick="toggleStoreGroup('standalone')" style="padding: 3px 8px; font-size: 11px; background: #fff4e6; border-color: #ffd8a8; color: #d9480f;">Standalone</button>
         </div>
         <div id="checkboxesWrapper" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;"></div>
     </div>
@@ -710,7 +709,6 @@
         const groups = {
             fairborn: ["Chevy North", "Mitsubishi", "GMC"],
             beavercreek: ["Mazda", "Nissan", "Cadillac"],
-            standalone: ["Admin", "Chevy East", "Chevy South"]
         };
 
         const targetStores = groups[groupKey] || [];
