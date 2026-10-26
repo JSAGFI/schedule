@@ -870,12 +870,24 @@
 
                     if (scheduleOverrides[empData.name] && scheduleOverrides[empData.name][dateKey] !== undefined) {
                         shiftText = scheduleOverrides[empData.name][dateKey]; isOverride = true;
-                        if (shiftText.toUpperCase().includes("VAC")) { isVacation = true; shiftText = "✈️ VAC"; }
-                        else if (shiftText.toUpperCase() === "OFF") { isOff = true; }
+                        if (shiftText.toUpperCase().includes("VAC")) { 
+                            isVacation = true; 
+                            shiftText = "✈️ VAC"; 
+                        }
+                        // If it's OFF, or any text with no numbers (like "South", "North", "Training") -> format as off/gray
+                        else if (shiftText.toUpperCase() === "OFF" || !/\d/.test(shiftText)) { 
+                            isOff = true; 
+                        }
                     } 
                     else if (empData[dayNameString] !== undefined) {
                         shiftText = empData[dayNameString];
-                        if (shiftText.toUpperCase() === "OFF" || shiftText.toUpperCase() === "CLOSED") { isOff = true; shiftText = "OFF"; }
+                        if (shiftText.toUpperCase() === "OFF" || shiftText.toUpperCase() === "CLOSED") { 
+                            isOff = true; 
+                            shiftText = "OFF"; 
+                        }
+                        else if (!/\d/.test(shiftText)) {
+                            isOff = true;
+                        }
                     }
 
                     if (shiftText !== "") {
