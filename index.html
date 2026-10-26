@@ -169,6 +169,11 @@
             margin-bottom: 5px;
             background-color: #f8f9fa;
         }
+        .day-number-badge.today {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+            border-color: #000000 !important;
+        }
         .shifts-container {
             display: flex;
             flex-direction: column;
@@ -820,6 +825,14 @@
 
             const badge = document.createElement('div');
             badge.className = 'day-number-badge';
+
+            // Check if this cell is today's real-world date
+            const realToday = new Date();
+            const realTodayKey = `${realToday.getFullYear()}-${String(realToday.getMonth() + 1).padStart(2, '0')}-${String(realToday.getDate()).padStart(2, '0')}`;
+            if (dateKey === realTodayKey) {
+                badge.classList.add('today');
+            }
+
             badge.textContent = day;
             cell.appendChild(badge);
 
